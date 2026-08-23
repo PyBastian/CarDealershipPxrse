@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../src/generated/prisma/client";
-import { demoSettings, demoVehicles } from "../src/lib/demo";
+import { inventorySettings, inventoryVehicles } from "../src/lib/inventory";
 
 const prisma = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL ?? "postgresql://nova:nova@localhost:5432/nova_autos" }) });
 
@@ -9,7 +9,7 @@ await prisma.vehicleFeature.deleteMany();
 await prisma.vehicleImage.deleteMany();
 await prisma.vehicle.deleteMany();
 
-for (const vehicle of demoVehicles) {
+for (const vehicle of inventoryVehicles) {
   await prisma.vehicle.create({
     data: {
       slug: vehicle.slug,
@@ -46,9 +46,9 @@ for (const vehicle of demoVehicles) {
 
 await prisma.globalSettings.upsert({
   where: { id: 1 },
-  update: demoSettings,
-  create: { id: 1, ...demoSettings }
+  update: inventorySettings,
+  create: { id: 1, ...inventorySettings }
 });
 
 await prisma.$disconnect();
-console.log(`Seed listo: ${demoVehicles.length} vehículos de demostración.`);
+console.log(`Seed listo: ${inventoryVehicles.length} vehículos de demostración.`);

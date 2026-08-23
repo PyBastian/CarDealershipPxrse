@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import { describe, expect, it } from "vitest";
 import { activeFilterCount, filterVehicles, isPublicStatus, parseCatalogState, relatedVehicles } from "@/lib/catalog";
-import { demoVehicles } from "@/lib/demo";
+import { inventoryVehicles } from "@/lib/inventory";
 import { formatKm, formatPrice, slugify } from "@/lib/format";
 import { validateAdmin } from "@/lib/auth";
 import { vehicleSchema } from "@/lib/vehicle-validation";
@@ -13,10 +13,10 @@ describe("formato chileno", () => {
 
 describe("catálogo", () => {
   it("ignora valores de URL inválidos", () => { const state = parseCatalogState({ precioMax: "no", transmision: "CVT", orden: "wat" }); expect(state).toEqual({ orden: "recommended" }); });
-  it("combina búsqueda, marca, precio y transmisión", () => { const state = parseCatalogState({ q: "rav4 2022", marca: "Toyota", transmision: "AUTOMATIC", precioMax: "20000000" }); expect(filterVehicles(demoVehicles, state).map((v) => v.model)).toEqual(["RAV4"]); expect(activeFilterCount(state)).toBe(4); });
-  it("ordena por precio", () => { const state = parseCatalogState({ orden: "price-asc" }); const result = filterVehicles(demoVehicles, state); expect(result[0].model).toBe("Swift"); expect(result.at(-1)?.model).toBe("Ranger"); });
+  it("combina búsqueda, marca, precio y transmisión", () => { const state = parseCatalogState({ q: "rav4 2022", marca: "Toyota", transmision: "AUTOMATIC", precioMax: "20000000" }); expect(filterVehicles(inventoryVehicles, state).map((v) => v.model)).toEqual(["RAV4"]); expect(activeFilterCount(state)).toBe(4); });
+  it("ordena por precio", () => { const state = parseCatalogState({ orden: "price-asc" }); const result = filterVehicles(inventoryVehicles, state); expect(result[0].model).toBe("Swift"); expect(result.at(-1)?.model).toBe("Ranger"); });
   it("aplica visibilidad por estado", () => { expect(isPublicStatus("AVAILABLE")).toBe(true); expect(isPublicStatus("RESERVED")).toBe(true); expect(isPublicStatus("SOLD")).toBe(false); expect(isPublicStatus("SOLD", true)).toBe(true); expect(isPublicStatus("DRAFT", true)).toBe(false); });
-  it("elige relacionados sin incluir el actual", () => { const current = demoVehicles[0]; const result = relatedVehicles(current, demoVehicles); expect(result).toHaveLength(4); expect(result.some((v) => v.id === current.id)).toBe(false); expect(result[0].bodyType).toBe("SUV"); });
+  it("elige relacionados sin incluir el actual", () => { const current = inventoryVehicles.find((vehicle) => vehicle.make === "Toyota")!; const result = relatedVehicles(current, inventoryVehicles); expect(result).toHaveLength(4); expect(result.some((v) => v.id === current.id)).toBe(false); expect(result[0].bodyType).toBe("SUV"); });
 });
 
 describe("límites de confianza", () => {

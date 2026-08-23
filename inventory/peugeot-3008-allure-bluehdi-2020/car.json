@@ -1,0 +1,27 @@
+{
+  "make": "Peugeot",
+  "model": "3008",
+  "trim": "Allure BlueHDi",
+  "year": 2020,
+  "price": 16490000,
+  "mileageKm": 70300,
+  "transmission": "AUTOMATIC",
+  "fuelType": "DIESEL",
+  "bodyType": "SUV",
+  "doors": 5,
+  "seats": 5,
+  "location": "Santiago, Región Metropolitana",
+  "status": "SOLD",
+  "featured": false,
+  "newArrival": false,
+  "opportunity": false,
+  "description": "Vehículo de demostración presentado con información clara y verificable. Coordina una visita para conocer su estado y antecedentes en detalle.",
+  "highlights": ["Mantenciones al día", "Documentación disponible", "Visita coordinada"],
+  "publishedAt": "2026-08-13T12:00:00Z",
+  "images": [{ "path": "/vehicles/hatchback-blue.png", "alt": "Peugeot 3008, vista principal" }],
+  "features": [
+    { "category": "Seguridad", "label": "Cámara de retroceso" },
+    { "category": "Confort", "label": "Control crucero" },
+    { "category": "Entretenimiento", "label": "Apple CarPlay" }
+  ]
+}

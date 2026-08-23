@@ -1,21 +1,21 @@
 import { cache } from "react";
-import { demoSettings, demoVehicles } from "./demo";
+import { inventorySettings, inventoryVehicles } from "./inventory";
 import { filterVehicles, isPublicStatus, type CatalogState } from "./catalog";
 import type { Settings, Vehicle } from "./types";
 
 const hasDatabase = () => Boolean(process.env.DATABASE_URL);
 
 export const getSettings = cache(async (): Promise<Settings> => {
-  if (!hasDatabase()) return demoSettings;
+  if (!hasDatabase()) return inventorySettings;
   const { getPrisma } = await import("./prisma");
   const value = await getPrisma().globalSettings.findUnique({ where: { id: 1 } });
-  return value ?? demoSettings;
+  return value ?? inventorySettings;
 });
 
 export async function getPublicVehicles(state?: CatalogState): Promise<Vehicle[]> {
   const settings = await getSettings();
   let vehicles: Vehicle[];
-  if (!hasDatabase()) vehicles = demoVehicles;
+  if (!hasDatabase()) vehicles = inventoryVehicles;
   else {
     const { getPrisma } = await import("./prisma");
     vehicles = await getPrisma().vehicle.findMany({
@@ -25,11 +25,11 @@ export async function getPublicVehicles(state?: CatalogState): Promise<Vehicle[]
     }) as unknown as Vehicle[];
   }
   const visible = vehicles.filter((vehicle) => isPublicStatus(vehicle.status, settings.showSold));
-  return state ? filterVehicles(visible, state) : visible;
+  return filterVehicles(visible, state ?? { orden: "recommended" });
 }
 
 export const getVehicleBySlug = cache(async (slug: string): Promise<Vehicle | null> => {
-  if (!hasDatabase()) return demoVehicles.find((vehicle) => vehicle.slug === slug && vehicle.status !== "DRAFT") ?? null;
+  if (!hasDatabase()) return inventoryVehicles.find((vehicle) => vehicle.slug === slug && vehicle.status !== "DRAFT") ?? null;
   const { getPrisma } = await import("./prisma");
   return getPrisma().vehicle.findFirst({
     where: { slug, deletedAt: null, status: { not: "DRAFT" } },
@@ -38,13 +38,13 @@ export const getVehicleBySlug = cache(async (slug: string): Promise<Vehicle | nu
 });
 
 export async function getAllPublicForSitemap() {
-  if (!hasDatabase()) return demoVehicles.filter((v) => v.status !== "DRAFT");
+  if (!hasDatabase()) return inventoryVehicles.filter((v) => v.status !== "DRAFT");
   const { getPrisma } = await import("./prisma");
   return getPrisma().vehicle.findMany({ where: { deletedAt: null, status: { not: "DRAFT" } }, select: { slug: true, updatedAt: true } });
 }
 
 export async function getAdminVehicles() {
-  if (!hasDatabase()) return demoVehicles;
+  if (!hasDatabase()) return inventoryVehicles;
   const { getPrisma } = await import("./prisma");
   return getPrisma().vehicle.findMany({ where: { deletedAt: null }, include: { images: { orderBy: { sortOrder: "asc" } }, features: true }, orderBy: { updatedAt: "desc" } }) as unknown as Vehicle[];
 }

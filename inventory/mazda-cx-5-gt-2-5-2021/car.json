@@ -1,0 +1,27 @@
+{
+  "make": "Mazda",
+  "model": "CX-5",
+  "trim": "GT 2.5",
+  "year": 2021,
+  "price": 18490000,
+  "mileageKm": 51800,
+  "transmission": "AUTOMATIC",
+  "fuelType": "GASOLINE",
+  "bodyType": "SUV",
+  "doors": 5,
+  "seats": 5,
+  "location": "Santiago, Región Metropolitana",
+  "status": "AVAILABLE",
+  "featured": true,
+  "newArrival": true,
+  "opportunity": false,
+  "description": "Vehículo de demostración presentado con información clara y verificable. Coordina una visita para conocer su estado y antecedentes en detalle.",
+  "highlights": ["Mantenciones al día", "Documentación disponible", "Visita coordinada"],
+  "publishedAt": "2026-08-19T12:00:00Z",
+  "images": [{ "path": "/vehicles/hatchback-blue.png", "alt": "Mazda CX-5, vista principal" }],
+  "features": [
+    { "category": "Seguridad", "label": "Cámara de retroceso" },
+    { "category": "Confort", "label": "Control crucero" },
+    { "category": "Entretenimiento", "label": "Apple CarPlay" }
+  ]
+}

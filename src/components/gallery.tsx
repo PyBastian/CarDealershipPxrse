@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import type { VehicleImage } from "@/lib/types";
 
 export function Gallery({ images, name }: { images: VehicleImage[]; name: string }) {
-  const safeImages = images.length ? images : [{ id: "placeholder", url: "/vehicles/suv-graphite.png", alt: name, sortOrder: 0, isCover: true }];
+  const safeImages = images.length ? images : [{ id: "placeholder", url: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/vehicles/suv-graphite.png`, alt: name, sortOrder: 0, isCover: true }];
   const [index, setIndex] = useState(0);
   const [startX, setStartX] = useState(0);
   const dialog = useRef<HTMLDialogElement>(null);

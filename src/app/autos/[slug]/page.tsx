@@ -7,10 +7,14 @@ import { Gallery } from "@/components/gallery";
 import { ShareButton } from "@/components/share-button";
 import { VehicleCard } from "@/components/vehicle-card";
 import { relatedVehicles } from "@/lib/catalog";
-import { getPublicVehicles, getSettings, getVehicleBySlug } from "@/lib/data";
+import { getAllPublicForSitemap, getPublicVehicles, getSettings, getVehicleBySlug } from "@/lib/data";
 import { formatKm, formatPrice, labels } from "@/lib/format";
 
 type Props = { params: Promise<{ slug: string }> };
+
+export async function generateStaticParams() {
+  return (await getAllPublicForSitemap()).map(({ slug }) => ({ slug }));
+}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const vehicle = await getVehicleBySlug((await params).slug);

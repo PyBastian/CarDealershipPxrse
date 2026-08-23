@@ -1,0 +1,35 @@
+{
+  "make": "Toyota",
+  "model": "RAV4",
+  "trim": "Limited AWD",
+  "year": 2022,
+  "price": 19990000,
+  "previousPrice": 20990000,
+  "mileageKm": 42500,
+  "transmission": "AUTOMATIC",
+  "fuelType": "GASOLINE",
+  "drivetrain": "AWD",
+  "engine": "2.0 L",
+  "bodyType": "SUV",
+  "exteriorColor": "Grafito",
+  "doors": 5,
+  "seats": 5,
+  "location": "Santiago, Región Metropolitana",
+  "status": "AVAILABLE",
+  "featured": true,
+  "newArrival": true,
+  "opportunity": false,
+  "description": "Vehículo de demostración presentado con información clara y verificable. Coordina una visita para conocer su estado y antecedentes en detalle.",
+  "highlights": ["Mantenciones al día", "Documentación disponible", "Visita coordinada"],
+  "publishedAt": "2026-08-20T12:00:00Z",
+  "images": [
+    { "path": "/vehicles/suv-graphite.png", "alt": "Toyota RAV4, vista frontal" },
+    { "path": "/vehicles/suv-graphite-side.png", "alt": "Toyota RAV4, vista lateral" },
+    { "path": "/vehicles/suv-graphite-rear.png", "alt": "Toyota RAV4, vista trasera" }
+  ],
+  "features": [
+    { "category": "Seguridad", "label": "Cámara de retroceso" },
+    { "category": "Confort", "label": "Control crucero" },
+    { "category": "Entretenimiento", "label": "Apple CarPlay" }
+  ]
+}

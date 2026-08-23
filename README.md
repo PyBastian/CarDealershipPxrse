@@ -1,6 +1,6 @@
 # NOVA AUTOS
 
-Premium dark used-car inventory for one owner. The public side is server-rendered and photo-first; the private side is a compact Auth.js-protected CMS backed by PostgreSQL and Prisma.
+Premium dark used-car inventory. The public catalog can run from editable JSON files and deploy as a static GitHub Pages site; the optional local admin remains backed by PostgreSQL and Prisma.
 
 ## Stack and structure
 
@@ -10,7 +10,7 @@ Premium dark used-car inventory for one owner. The public side is server-rendere
 - Zod validation, Sharp image validation/optimization, Lucide icons
 - Vitest unit checks and Playwright browser flows
 
-Public routes live in `src/app`; cohesive UI pieces are in `src/components`; filtering, formatting, data access, validation and auth live in `src/lib`. Without `DATABASE_URL`, public pages use the clearly marked eight-car demo inventory so design work and builds remain available. Admin writes always require PostgreSQL.
+Public routes live in `src/app`; cohesive UI pieces are in `src/components`; filtering, formatting, data access, validation and auth live in `src/lib`. Without `DATABASE_URL`, public pages load every `inventory/*/car.json` file. Admin writes always require PostgreSQL.
 
 ## Local setup
 
@@ -49,11 +49,17 @@ Copy the printed hash to `ADMIN_PASSWORD_HASH` in `.env`, set `ADMIN_EMAIL`, the
 
 ## Inventory and images
 
-Use **Administración → Nuevo auto** to create a draft, upload photos, add equipment, and publish. The first photo is the catalog cover. Uploaded JPG, PNG, WebP and AVIF files are decoded to verify they are real images, require at least 600 × 400 px, are capped at 10 MB, rotated correctly and normalized to WebP. They are stored in `public/uploads/vehicles`; mount that directory as a persistent volume in self-hosted production.
+For the static site, duplicate an existing folder under `inventory`, edit its `car.json`, and place its photos in `public/vehicles`. The first image listed is the catalog cover. Full instructions are in [`inventory/README.md`](inventory/README.md).
+
+The optional local admin can also create drafts and upload photos when PostgreSQL is configured. Uploaded JPG, PNG, WebP and AVIF files are checked, capped at 10 MB and normalized to WebP in `public/uploads/vehicles`.
 
 Demo imagery in `public/vehicles` is original AI-generated content created for this project. Seed records are explicitly demonstrative and must be replaced with real inventory before launch.
 
-Brand, WhatsApp, phone, email, location, social link and sold-vehicle visibility are editable in **Administración → Configuración**. Private notes are queried only by admin pages and never serialized into public pages, metadata, sitemap or structured data.
+Brand, WhatsApp, phone, email, location, social link and sold-vehicle visibility for JSON mode are in `inventory/settings.json`.
+
+## GitHub Pages
+
+The workflow in `.github/workflows/pages.yml` builds and publishes the public routes whenever `main` changes. In GitHub, choose **Settings → Pages → Source: GitHub Actions** once; later inventory edits deploy automatically.
 
 ## Commands
 

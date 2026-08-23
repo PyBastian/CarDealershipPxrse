@@ -1,0 +1,28 @@
+{
+  "make": "Ford",
+  "model": "Ranger",
+  "trim": "XLT 4x4",
+  "year": 2020,
+  "price": 22990000,
+  "mileageKm": 78900,
+  "transmission": "AUTOMATIC",
+  "fuelType": "DIESEL",
+  "drivetrain": "4x4",
+  "bodyType": "PICKUP",
+  "doors": 4,
+  "seats": 5,
+  "location": "Santiago, Región Metropolitana",
+  "status": "AVAILABLE",
+  "featured": true,
+  "newArrival": false,
+  "opportunity": false,
+  "description": "Vehículo de demostración presentado con información clara y verificable. Coordina una visita para conocer su estado y antecedentes en detalle.",
+  "highlights": ["Mantenciones al día", "Documentación disponible", "Visita coordinada"],
+  "publishedAt": "2026-08-18T12:00:00Z",
+  "images": [{ "path": "/vehicles/pickup-white.png", "alt": "Ford Ranger, vista principal" }],
+  "features": [
+    { "category": "Seguridad", "label": "Cámara de retroceso" },
+    { "category": "Confort", "label": "Control crucero" },
+    { "category": "Entretenimiento", "label": "Apple CarPlay" }
+  ]
+}

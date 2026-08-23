@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "exclude": [
+    "node_modules",
+    "src/app/(admin)",
+    "src/app/(auth)",
+    "src/app/api",
+    "src/components/login-form.tsx",
+    "src/components/vehicle-card-admin.tsx",
+    "src/components/vehicle-form.tsx"
+  ]
+}
