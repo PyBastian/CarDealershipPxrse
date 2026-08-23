@@ -7,7 +7,7 @@ export async function Header() {
   const whatsapp = `https://wa.me/${settings.whatsappNumber}`;
   return <header className="site-header">
     <div className="shell header-inner">
-      <Link href="/" className="brand" aria-label={`${settings.brandName}, inicio`}><span className="brand-mark">N</span>{settings.brandName}</Link>
+      <Link href="/" className="brand" aria-label={`${settings.brandName}, inicio`}><span className="brand-mark">LP</span>{settings.brandName}</Link>
       <nav className="desktop-nav" aria-label="Navegación principal">
         <Link href="/">Inicio</Link><Link href="/autos">Autos</Link><Link href="/contacto">Contacto</Link>
       </nav>

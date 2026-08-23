@@ -77,7 +77,7 @@ CREATE TABLE "VehicleFeature" (
 -- CreateTable
 CREATE TABLE "GlobalSettings" (
     "id" INTEGER NOT NULL DEFAULT 1,
-    "brandName" TEXT NOT NULL DEFAULT 'NOVA AUTOS',
+    "brandName" TEXT NOT NULL DEFAULT 'LO PRADO AUTOS',
     "logoUrl" TEXT,
     "whatsappNumber" TEXT NOT NULL,
     "phone" TEXT,

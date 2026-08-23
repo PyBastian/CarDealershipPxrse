@@ -110,7 +110,7 @@ model VehicleFeature {
 
 model GlobalSettings {
   id              Int     @id @default(1)
-  brandName       String  @default("NOVA AUTOS")
+  brandName       String  @default("LO PRADO AUTOS")
   logoUrl         String?
   whatsappNumber  String
   phone           String?

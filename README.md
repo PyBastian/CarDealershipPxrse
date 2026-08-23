@@ -1,4 +1,4 @@
-# NOVA AUTOS
+# LO PRADO AUTOS
 
 Premium dark used-car inventory. The public catalog can run from editable JSON files and deploy as a static GitHub Pages site; the optional local admin remains backed by PostgreSQL and Prisma.
 
@@ -40,9 +40,9 @@ Open [http://localhost:3000](http://localhost:3000). Prisma Studio is available 
 Create a password hash without placing the password in shell history:
 
 ```bash
-read -s -p "Nueva contraseña: " NOVA_PASSWORD; echo
-ADMIN_PASSWORD="$NOVA_PASSWORD" node --input-type=module -e 'import bcrypt from "bcryptjs"; console.log(await bcrypt.hash(process.env.ADMIN_PASSWORD, 12))'
-unset NOVA_PASSWORD
+read -s -p "Nueva contraseña: " LOPRADO_PASSWORD; echo
+ADMIN_PASSWORD="$LOPRADO_PASSWORD" node --input-type=module -e 'import bcrypt from "bcryptjs"; console.log(await bcrypt.hash(process.env.ADMIN_PASSWORD, 12))'
+unset LOPRADO_PASSWORD
 ```
 
 Copy the printed hash to `ADMIN_PASSWORD_HASH` in `.env`, set `ADMIN_EMAIL`, then visit `/admin/login`.
