@@ -1,0 +1,10 @@
+node_modules
+.next
+.playwright-cli
+.env
+src/generated
+public/uploads
+output
+test-results
+playwright-report
+*.tsbuildinfo

@@ -1,0 +1,3 @@
+import type { MetadataRoute } from "next";
+import { getAllPublicForSitemap } from "@/lib/data";
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> { const base = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"; const vehicles = await getAllPublicForSitemap(); return [{ url: base, changeFrequency: "weekly", priority: 1 }, { url: `${base}/autos`, changeFrequency: "daily", priority: .9 }, { url: `${base}/contacto`, changeFrequency: "monthly", priority: .5 }, ...vehicles.map((vehicle) => ({ url: `${base}/autos/${vehicle.slug}`, lastModified: vehicle.updatedAt, changeFrequency: "weekly" as const, priority: .8 }))]; }

@@ -1,0 +1,123 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum VehicleStatus {
+  AVAILABLE
+  RESERVED
+  SOLD
+  DRAFT
+}
+
+enum Transmission {
+  MANUAL
+  AUTOMATIC
+}
+
+enum FuelType {
+  GASOLINE
+  DIESEL
+  HYBRID
+  ELECTRIC
+  OTHER
+}
+
+enum BodyType {
+  SUV
+  SEDAN
+  HATCHBACK
+  PICKUP
+  WAGON
+  COUPE
+  VAN
+  OTHER
+}
+
+model Vehicle {
+  id             String         @id @default(cuid())
+  slug           String         @unique
+  stockCode      String?        @unique
+  make           String
+  model          String
+  trim           String?
+  year           Int
+  price          Int
+  previousPrice  Int?
+  mileageKm      Int
+  transmission   Transmission
+  fuelType       FuelType
+  drivetrain     String?
+  engine         String?
+  bodyType       BodyType
+  exteriorColor  String?
+  interiorColor  String?
+  doors          Int?
+  seats          Int?
+  horsepower     Int?
+  location       String
+  status         VehicleStatus  @default(DRAFT)
+  featured       Boolean        @default(false)
+  newArrival     Boolean        @default(false)
+  opportunity    Boolean        @default(false)
+  description    String?
+  highlights     String[]
+  internalNotes  String?
+  publishedAt    DateTime?
+  deletedAt      DateTime?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  images         VehicleImage[]
+  features       VehicleFeature[]
+
+  @@index([status, publishedAt])
+  @@index([make, model])
+  @@index([price])
+  @@index([year])
+  @@index([mileageKm])
+  @@index([bodyType])
+}
+
+model VehicleImage {
+  id        String   @id @default(cuid())
+  vehicleId String
+  url       String
+  alt       String
+  sortOrder Int      @default(0)
+  isCover   Boolean  @default(false)
+  width     Int?
+  height    Int?
+  createdAt DateTime @default(now())
+  vehicle   Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+
+  @@index([vehicleId, sortOrder])
+}
+
+model VehicleFeature {
+  id        String  @id @default(cuid())
+  vehicleId String
+  category  String
+  label     String
+  value     String?
+  vehicle   Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+
+  @@index([vehicleId, category])
+}
+
+model GlobalSettings {
+  id              Int     @id @default(1)
+  brandName       String  @default("NOVA AUTOS")
+  logoUrl         String?
+  whatsappNumber  String
+  phone           String?
+  email           String?
+  instagramUrl    String?
+  locationText    String?
+  siteTitle       String
+  siteDescription String
+  showSold         Boolean @default(false)
+}
