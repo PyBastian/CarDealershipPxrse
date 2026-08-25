@@ -1,7 +1,22 @@
 import { deleteFile, getFile, updateFile } from "./client";
+import { listTree } from "./repository";
+import { BRANCH, OWNER, REPO } from "./types";
 
 const MAX_WIDTH = 1800;
 const QUALITY = 0.82;
+
+export function repoPhotoUrl(path: string) {
+  return `https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}/public${path}`;
+}
+
+export async function listRepoPhotos(token: string) {
+  const tree = await listTree(token);
+  return tree
+    .map((entry) => entry.path)
+    .filter((path) => /^public\/vehicles\/.+\.(png|jpe?g|webp|avif)$/i.test(path))
+    .map((path) => path.replace(/^public/, ""))
+    .sort();
+}
 
 export async function processImage(file: File): Promise<{ bytes: Uint8Array; extension: "webp" | "jpg" }> {
   const bitmap = await createImageBitmap(file, { imageOrientation: "from-image" });

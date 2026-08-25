@@ -24,7 +24,12 @@ async function mockGithub(page: Page) {
     const path = url.pathname.replace("/repos/PyBastian/CarDealershipPxrse", "");
     const method = route.request().method();
     if (path === "" && method === "GET") return route.fulfill(json({ permissions: { pull: true, push: true } }));
-    if (path === "/git/trees/main" && method === "GET") return route.fulfill(json({ tree: [{ path: "inventory/toyota-rav4-limited-awd-2022/car.json", type: "blob" }] }));
+    if (path === "/git/trees/main" && method === "GET") return route.fulfill(json({ tree: [
+      { path: "inventory/toyota-rav4-limited-awd-2022/car.json", type: "blob" },
+      { path: "public/vehicles/suv-graphite.png", type: "blob" },
+      { path: "public/vehicles/suv-graphite-side.png", type: "blob" },
+      { path: "public/vehicles/suv-graphite-rear.png", type: "blob" }
+    ] }));
     if (path.startsWith("/contents/") && method === "GET") return route.fulfill(fileResponse());
     if (path.startsWith("/contents/") && method === "PUT") {
       const body = route.request().postDataJSON() as { message: string; content?: string };
@@ -63,10 +68,19 @@ test("conexión con token y catálogo editable vía GitHub simulado", async ({ p
   expect(github.commits.some((message) => message.startsWith("admin: add photo to Toyota RAV4"))).toBe(true);
   expect(github.commits.some((message) => message.startsWith("admin: add photos to Toyota RAV4"))).toBe(true);
 
+  await page.getByRole("button", { name: /Usar fotos del sitio/ }).click();
+  const picker = page.locator(".palomin-picker");
+  await expect(picker).toBeVisible();
+  await expect(picker.getByRole("button", { name: /Asignar/ })).toHaveCount(2);
+  await picker.getByRole("button", { name: /suv-graphite-side/ }).click();
+  await picker.getByRole("button", { name: /Agregar 1/ }).click();
+  await expect(page.locator(".palomin-photo-grid li")).toHaveCount(3);
+  await expect(page.locator(".palomin-picker")).not.toBeVisible();
+
   await page.locator(".palomin-photo-open").first().click();
   const lightbox = page.locator(".palomin-lightbox");
   await expect(lightbox).toBeVisible();
-  await expect(lightbox.getByText("1 / 2")).toBeVisible();
+  await expect(lightbox.getByText("1 / 3")).toBeVisible();
   await lightbox.getByLabel(/Texto alternativo/).fill("Toyota RAV4 vista frontal en estudio");
   await lightbox.getByRole("button", { name: "Guardar" }).click();
   await expect(lightbox).not.toBeVisible();
