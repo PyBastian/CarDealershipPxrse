@@ -14,10 +14,11 @@ const car = {
 const sha = "abc123sha";
 
 async function mockGithub(page: Page) {
-  let currentPrice = car.price;
+  const currentPrice = car.price;
+  let currentImages = car.images;
   const commits: string[] = [];
   const json = (data: unknown) => ({ status: 200, contentType: "application/json", body: JSON.stringify(data) });
-  const fileResponse = () => json({ sha, name: "car.json", path: `inventory/toyota-rav4-limited-awd-2022/car.json`, type: "file", encoding: "base64", content: Buffer.from(JSON.stringify({ ...car, price: currentPrice })).toString("base64") });
+  const fileResponse = () => json({ sha, name: "car.json", path: `inventory/toyota-rav4-limited-awd-2022/car.json`, type: "file", encoding: "base64", content: Buffer.from(JSON.stringify({ ...car, price: currentPrice, images: currentImages })).toString("base64") });
   await page.route("**/api.github.com/**", async (route) => {
     const url = new URL(route.request().url());
     const path = url.pathname.replace("/repos/PyBastian/CarDealershipPxrse", "");
@@ -26,13 +27,14 @@ async function mockGithub(page: Page) {
     if (path === "/git/trees/main" && method === "GET") return route.fulfill(json({ tree: [{ path: "inventory/toyota-rav4-limited-awd-2022/car.json", type: "blob" }] }));
     if (path.startsWith("/contents/") && method === "GET") return route.fulfill(fileResponse());
     if (path.startsWith("/contents/") && method === "PUT") {
-      const body = route.request().postDataJSON() as { message: string };
+      const body = route.request().postDataJSON() as { message: string; content?: string };
       commits.push(body.message);
+      if (body.content && path.endsWith("car.json")) currentImages = JSON.parse(Buffer.from(body.content, "base64").toString()).images;
       return route.fulfill(json({ content: { sha: "newsha" } }));
     }
     return route.fulfill({ status: 404, body: "{}" });
   });
-  return { commits, setPrice: (value: number) => { currentPrice = value; } };
+  return { commits };
 }
 
 test("conexión con token y catálogo editable vía GitHub simulado", async ({ page }) => {
@@ -55,4 +57,18 @@ test("conexión con token y catálogo editable vía GitHub simulado", async ({ p
   await page.getByRole("button", { name: /Guardar/ }).click();
   await expect(page.getByText(/Cambios guardados|reconstruyendo/i).first()).toBeVisible();
   expect(github.commits.some((message) => message.startsWith("admin: update Toyota RAV4"))).toBe(true);
+  await page.locator(".dropzone input[type=file]").setInputFiles("public/vehicles/suv-graphite.png");
+  await expect(page.locator(".palomin-photo-grid li.pending")).toHaveCount(0, { timeout: 30000 });
+  await expect(page.locator(".palomin-photo-grid li")).toHaveCount(2);
+  expect(github.commits.some((message) => message.startsWith("admin: add photo to Toyota RAV4"))).toBe(true);
+  expect(github.commits.some((message) => message.startsWith("admin: add photos to Toyota RAV4"))).toBe(true);
+
+  await page.locator(".palomin-photo-open").first().click();
+  const lightbox = page.locator(".palomin-lightbox");
+  await expect(lightbox).toBeVisible();
+  await expect(lightbox.getByText("1 / 2")).toBeVisible();
+  await lightbox.getByLabel(/Texto alternativo/).fill("Toyota RAV4 vista frontal en estudio");
+  await lightbox.getByRole("button", { name: "Guardar" }).click();
+  await expect(lightbox).not.toBeVisible();
+  expect(github.commits.some((message) => message.startsWith("admin: update photos of Toyota RAV4"))).toBe(true);
 });

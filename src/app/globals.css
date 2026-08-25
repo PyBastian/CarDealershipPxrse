@@ -583,3 +583,23 @@ button.palomin-kpi:hover { border-color: var(--border-strong); }
   .form-sticky.palomin-sticky-actions { position: fixed; inset-inline: 0; bottom: 0; z-index: 55; flex-wrap: wrap; border: 0; border-radius: 0; border-top: 1px solid var(--border-strong); padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); }
   .palomin-sticky-actions .button { flex: 1; min-height: 48px; }
 }
+
+.palomin-photo-open { display: block; width: 100%; height: 100%; padding: 0; border: 0; background: transparent; cursor: zoom-in; }
+.palomin-photo-grid li.pending img { opacity: .45; }
+.palomin-pending-note { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 5px; color: var(--text-secondary); font-size: .7rem; font-weight: 700; text-shadow: 0 1px 4px #000; }
+.palomin-photo-grid li.failed { outline: 1px solid var(--danger); }
+.dropzone.drag { border-color: var(--accent); background: #d4af5a0d; }
+.palomin-lightbox { width: 100vw; max-width: none; height: 100dvh; max-height: none; margin: 0; padding: 0; border: 0; background: #050607f2; color: var(--text); overflow: hidden; }
+.palomin-lightbox::backdrop { background: #050607cc; }
+.palomin-lightbox > img { position: absolute; inset: 74px 16px 130px; width: calc(100% - 32px); height: calc(100% - 204px); object-fit: contain; }
+.palomin-lightbox-bar { position: absolute; inset-inline: 0; top: 0; min-height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 16px; border-bottom: 1px solid var(--border); background: #050607e6; }
+.palomin-lightbox-bar > span { color: var(--text-secondary); font-size: .8rem; font-variant-numeric: tabular-nums; }
+.palomin-lightbox-bar > div { display: flex; gap: 7px; }
+.palomin-lightbox-alt { position: absolute; inset-inline: 0; bottom: 0; display: flex; align-items: end; gap: 12px; padding: 14px 16px calc(14px + env(safe-area-inset-bottom)); border-top: 1px solid var(--border); background: #050607e6; }
+.palomin-lightbox-alt label { flex: 1; display: grid; gap: 6px; color: var(--text-secondary); font-size: .78rem; font-weight: 650; }
+.palomin-lightbox-alt small { color: var(--text-muted); font-weight: 400; }
+.palomin-lightbox-alt .button { min-width: 128px; }
+@media (max-width: 580px) {
+  .palomin-lightbox-alt { align-items: stretch; flex-direction: column; }
+  .palomin-lightbox-alt .button { width: 100%; }
+}
