@@ -5,6 +5,7 @@ node_modules
 src/generated
 public/uploads
 output
+out
 test-results
 playwright-report
 *.tsbuildinfo

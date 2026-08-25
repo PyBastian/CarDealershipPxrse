@@ -351,6 +351,7 @@ input:focus, select:focus, textarea:focus, button:focus-visible, a:focus-visible
 
 /* Admin */
 body:has(.admin-shell) > .site-header, body:has(.admin-shell) > .footer, body:has(.admin-login) > .site-header, body:has(.admin-login) > .footer { display: none; }
+body:has(.palomin-shell) > .site-header, body:has(.palomin-shell) > .footer { display: none; }
 body:has(.admin-shell), body:has(.admin-login) { background: #0c0f13; }
 .admin-login { min-height: 100dvh; display: grid; place-items: center; padding: 24px; }
 .login-card { width: min(430px, 100%); padding: 38px; border: 1px solid var(--border); border-radius: 16px; background: var(--surface); }
@@ -451,4 +452,134 @@ body:has(.admin-shell), body:has(.admin-login) { background: #0c0f13; }
   .danger-zone { align-items: stretch; flex-direction: column; }
   .danger-zone > div:last-child { justify-content: stretch; }
   .danger-zone form, .danger-zone button { width: 100%; }
+}
+
+/* The Last Palomin */
+.palomin-shell { min-height: 100dvh; display: flex; flex-direction: column; background: #0c0f13; }
+.palomin-main { flex: 1; width: 100%; }
+.palomin-page { width: min(1360px, calc(100% - 48px)); margin-inline: auto; padding-block: 34px 90px; }
+.palomin-narrow { max-width: 860px; }
+
+.palomin-toolbar { position: sticky; z-index: 60; top: 0; border-bottom: 1px solid var(--border); background: rgba(9,11,14,.94); backdrop-filter: blur(14px); }
+.palomin-toolbar-inner { min-height: 58px; display: flex; align-items: center; gap: 18px; padding-block: 8px; }
+.palomin-dot { width: 7px; height: 7px; margin-left: 2px; border-radius: 50%; background: var(--border-strong); }
+.palomin-dot.on { background: #59c98a; box-shadow: 0 0 8px #59c98a88; }
+.palomin-nav { display: flex; gap: 4px; margin-right: auto; }
+.palomin-nav a { min-height: 40px; display: inline-flex; align-items: center; padding: 0 13px; border-radius: 9px; color: var(--text-secondary); font-size: .86rem; font-weight: 650; }
+.palomin-nav a:hover { background: var(--surface-hover); color: var(--text); }
+.palomin-nav a.active { background: var(--surface-raised); color: var(--accent); }
+.palomin-toolbar-status { display: flex; align-items: center; gap: 12px; }
+.palomin-connection { color: var(--text-muted); font-size: .74rem; white-space: nowrap; }
+.palomin-public-link { display: inline-flex; align-items: center; gap: 6px; min-height: 38px; padding: 0 11px; border: 1px solid var(--border); border-radius: 9px; color: var(--text-secondary); font-size: .78rem; white-space: nowrap; }
+.palomin-public-link:hover { border-color: var(--border-strong); color: var(--text); }
+.palomin-disconnect { width: 38px; height: 38px; border-radius: 9px; }
+
+.palomin-connection-screen { min-height: calc(100dvh - 140px); display: grid; place-items: center; padding: 30px 20px; }
+.palomin-connection-screen .login-card h1 { font-size: 1.9rem; letter-spacing: -.03em; }
+.palomin-token-label { display: grid; gap: 7px; color: var(--text-secondary); font-size: .78rem; font-weight: 650; }
+.palomin-token-help { color: var(--text-muted); font-size: .8rem; }
+.palomin-token-help summary { min-height: 36px; display: flex; align-items: center; color: var(--text-secondary); }
+.palomin-token-help ol { margin: 8px 0 0; padding-left: 18px; display: grid; gap: 7px; }
+
+.palomin-heading { display: flex; align-items: start; justify-content: space-between; gap: 18px; margin-bottom: 24px; }
+.palomin-heading h1 { margin: 8px 0 4px; font-size: clamp(1.9rem, 3.5vw, 2.7rem); }
+.palomin-heading p { margin: 0; color: var(--text-muted); font-size: .8rem; word-break: break-all; }
+.palomin-heading .status { margin: 10px 0 0; }
+
+.palomin-hero { padding-block: 26px 46px; }
+.palomin-hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+.hero-visual > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+.hero-visual:hover > img { transform: scale(1.015); }
+.palomin-home-grid-section { padding-block: 12px 70px; }
+
+.palomin-banner { min-height: 50px; margin-bottom: 14px; padding: 10px 15px; display: flex; align-items: center; gap: 9px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); color: var(--text-secondary); font-size: .85rem; }
+.palomin-banner-error { border-color: #f06a6a55; background: #f06a6a10; color: var(--danger); }
+.palomin-banner svg, .success-banner svg { flex: 0 0 auto; }
+.palomin-post-save { margin: 0 0 16px; color: var(--text-muted); font-size: .82rem; }
+.palomin-post-save a { color: var(--accent); font-weight: 650; }
+.palomin-dirty-note { margin-right: auto; color: var(--warning); font-size: .78rem; }
+
+.palomin-kpis { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 22px; }
+.palomin-kpi { min-height: 64px; display: grid; place-content: center; gap: 1px; padding: 10px; border: 1px solid var(--border); border-radius: 11px; background: var(--surface); color: var(--text-secondary); text-align: center; }
+.palomin-kpi strong { font-size: 1.35rem; color: var(--text); font-variant-numeric: tabular-nums; }
+.palomin-kpi span { font-size: .72rem; color: var(--text-muted); }
+.palomin-kpi.active { border-color: var(--accent); }
+.palomin-kpi.active strong { color: var(--accent); }
+button.palomin-kpi:hover { border-color: var(--border-strong); }
+
+.palomin-search { margin-bottom: 16px; display: flex; align-items: center; gap: 10px; padding: 0 15px; border: 1px solid var(--border-strong); border-radius: 11px; background: var(--surface); color: var(--text-muted); }
+.palomin-search input { border: 0; background: transparent; min-height: 48px; padding: 0; }
+.palomin-search input:focus { outline: none; }
+
+.palomin-inventory { display: grid; gap: 9px; list-style: none; margin: 0; padding: 0; }
+.palomin-row { display: grid; grid-template-columns: 92px minmax(180px, 1.4fr) minmax(120px, .7fr) auto auto; align-items: center; gap: 15px; padding: 9px 13px 9px 9px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); transition: border-color .2s, opacity .2s; }
+.palomin-row:hover { border-color: var(--border-strong); }
+.palomin-row.busy { opacity: .55; pointer-events: none; }
+.palomin-thumb { position: relative; height: 56px; overflow: hidden; border-radius: 8px; background: var(--surface-raised); }
+.palomin-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.palomin-row-name { min-width: 0; display: flex; flex-direction: column; }
+.palomin-row-name strong { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.palomin-row-name small { color: var(--text-muted); font-size: .74rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.palomin-row-price { font-weight: 750; font-variant-numeric: tabular-nums; }
+.palomin-row .status { margin: 0; }
+.palomin-row-actions { display: flex; align-items: center; justify-content: end; gap: 6px; }
+.palomin-row-actions select { width: auto; min-height: 38px; padding: 0 8px; font-size: .78rem; }
+.palomin-row-actions .icon-button { width: 38px; height: 38px; border-radius: 9px; background: transparent; }
+.icon-button.danger:hover { color: var(--danger); border-color: var(--danger); }
+
+.status-available { background: #59c98a17; color: #59c98a; }
+.status-draft { background: #ffffff0d; color: var(--text-muted); }
+
+.palomin-card-tools { position: absolute; z-index: 4; right: 10px; top: 10px; display: flex; gap: 7px; }
+.palomin-menu { position: relative; }
+.palomin-menu > summary { list-style: none; }
+.palomin-menu > summary::-webkit-details-marker { display: none; }
+.palomin-menu-body { position: absolute; right: 0; top: 48px; min-width: 200px; padding: 7px; display: grid; gap: 2px; border: 1px solid var(--border); border-radius: 11px; background: var(--surface-raised); box-shadow: 0 20px 45px #000a; }
+.palomin-menu-body button { min-height: 42px; display: flex; align-items: center; gap: 9px; padding: 0 11px; border: 0; border-radius: 8px; background: transparent; color: var(--text-secondary); text-align: left; font-size: .84rem; }
+.palomin-menu-body button:hover { background: var(--surface-hover); color: var(--text); }
+.palomin-menu-body button.current { color: var(--accent); }
+.palomin-menu-body button.danger { color: var(--danger); }
+.palomin-menu-group { display: grid; gap: 2px; padding-bottom: 6px; margin-bottom: 5px; border-bottom: 1px solid var(--border); }
+.palomin-price-edit { display: flex; align-items: center; gap: 6px; }
+.palomin-price-edit input { width: 130px; min-height: 40px; font-weight: 700; }
+.palomin-price-pencil { width: 32px; height: 32px; border: 0; background: transparent; color: var(--text-muted); }
+.palomin-price-pencil:hover { color: var(--accent); }
+.palomin-status-available, .palomin-status-reserved, .palomin-status-sold, .palomin-status-draft { margin: 13px 0 0; }
+
+.palomin-image-manager { display: grid; gap: 13px; }
+.palomin-photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
+.palomin-photo-grid li { position: relative; aspect-ratio: 4/3; overflow: hidden; border-radius: 9px; background: var(--surface-raised); }
+.palomin-photo-grid img { width: 100%; height: 100%; object-fit: cover; }
+.palomin-cover-tag { position: absolute; left: 7px; top: 7px; padding: 3px 8px; border-radius: 6px; background: #d4af5ae6; color: var(--accent-foreground); font-size: .62rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+.palomin-photo-tools { position: absolute; inset-inline: 6px; bottom: 6px; display: flex; justify-content: center; gap: 6px; }
+.palomin-photo-tools .icon-button { width: 34px; height: 34px; background: rgba(9,11,14,.82); }
+.dropzone.busy { pointer-events: none; opacity: .75; }
+
+.palomin-dialog { width: min(430px, calc(100vw - 40px)); margin: auto; padding: 28px; border: 1px solid var(--border-strong); border-radius: 16px; background: var(--surface-raised); color: var(--text); }
+.palomin-dialog::backdrop { background: #000b; }
+.palomin-dialog h2 { margin: 0 0 9px; font-size: 1.25rem; }
+.palomin-dialog p { margin: 0; color: var(--text-secondary); font-size: .88rem; }
+.palomin-dialog-actions { margin-top: 24px; display: flex; justify-content: end; gap: 9px; }
+
+@media (max-width: 800px) {
+  .palomin-page { width: calc(100% - 32px); padding-block: 22px 80px; }
+  .palomin-toolbar-inner { gap: 9px; flex-wrap: wrap; }
+  .palomin-nav { order: 3; width: 100%; margin: 0; }
+  .palomin-nav a { flex: 1; justify-content: center; padding: 0 8px; font-size: .78rem; }
+  .palomin-nav-short { display: none; }
+  .palomin-toolbar-status { margin-left: auto; }
+  .palomin-connection { display: none; }
+  .palomin-public-link { font-size: 0; gap: 0; }
+  .palomin-public-link svg { width: 17px; }
+  .palomin-hero { padding-block: 8px 40px; }
+  .palomin-kpis { grid-template-columns: repeat(2, 1fr); }
+  .palomin-kpi:first-child { grid-column: 1 / -1; }
+  .palomin-row { grid-template-columns: 76px 1fr auto; grid-template-areas: "thumb name actions" "thumb price status"; row-gap: 8px; }
+  .palomin-thumb { grid-area: thumb; height: 66px; }
+  .palomin-row-name { grid-area: name; }
+  .palomin-row-price { grid-area: price; }
+  .palomin-row .status { grid-area: status; justify-self: start; }
+  .palomin-row-actions { grid-area: actions; }
+  .form-sticky.palomin-sticky-actions { position: fixed; inset-inline: 0; bottom: 0; z-index: 55; flex-wrap: wrap; border: 0; border-radius: 0; border-top: 1px solid var(--border-strong); padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); }
+  .palomin-sticky-actions .button { flex: 1; min-height: 48px; }
 }
