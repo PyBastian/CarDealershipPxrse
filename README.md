@@ -1,6 +1,8 @@
-# LO PRADO AUTOS
+# MK CARS
 
 Catálogo de autos usados con diseño oscuro, información detallada y contacto directo por WhatsApp. El inventario público se administra con archivos JSON y se publica automáticamente en GitHub Pages.
+
+Las tres publicaciones más recientes de [@mkcars.cl](https://www.instagram.com/mkcars.cl/) se actualizan a diario mediante `.github/workflows/sync-instagram.yml`. Para sincronizarlas manualmente usa `npm run sync:instagram`; el script guarda una copia local de las imágenes para evitar enlaces temporales de Instagram.
 
 **Sitio público:** [pybastian.github.io/CarDealershipPxrse](https://pybastian.github.io/CarDealershipPxrse/)
 
@@ -150,4 +152,4 @@ npm run db:seed      # solo panel legado
 npm run db:studio    # solo panel legado
 ```
 
-Las imágenes actuales son demostrativas y deben reemplazarse con fotografías reales antes del lanzamiento comercial.
+Los vehículos de ejemplo permanecen como borradores para reutilizarlos como plantillas; el catálogo público muestra solo publicaciones reales confirmadas.

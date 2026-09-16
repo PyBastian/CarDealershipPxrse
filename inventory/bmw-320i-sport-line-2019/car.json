@@ -11,7 +11,7 @@
   "doors": 4,
   "seats": 5,
   "location": "Santiago, Región Metropolitana",
-  "status": "AVAILABLE",
+  "status": "DRAFT",
   "featured": false,
   "newArrival": false,
   "opportunity": false,

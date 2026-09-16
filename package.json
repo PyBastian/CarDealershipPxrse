@@ -1,5 +1,5 @@
 {
-  "name": "lo-prado-autos",
+  "name": "mk-cars",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -9,8 +9,9 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run",
+    "test": "vitest run && node --test scripts/sync-instagram.self-test.mjs",
     "test:e2e": "playwright test",
+    "sync:instagram": "node scripts/sync-instagram.mjs",
     "db:migrate": "prisma migrate dev",
     "db:seed": "prisma db seed",
     "db:studio": "prisma studio",

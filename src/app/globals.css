@@ -8,9 +8,9 @@
   --text: #f4f6f8;
   --text-secondary: #c3cbd4;
   --text-muted: #8f9aa6;
-  --accent: #d4af5a;
-  --accent-hover: #e2c574;
-  --accent-foreground: #171106;
+  --accent: #e3262e;
+  --accent-hover: #f03b43;
+  --accent-foreground: #fff;
   --danger: #f06a6a;
   --warning: #e7b45f;
   --radius: 14px;
@@ -92,6 +92,18 @@ input:focus, select:focus, textarea:focus, button:focus-visible, a:focus-visible
 .contact-banner { margin-block: 20px 72px; min-height: 230px; padding: clamp(30px, 5vw, 60px); display: flex; align-items: center; justify-content: space-between; gap: 30px; border: 1px solid var(--border); border-radius: 18px; background: var(--surface); }
 .contact-banner h2 { margin: 10px 0; }
 .contact-banner p { margin: 0; color: var(--text-secondary); }
+.instagram-section { padding-top: 30px; }
+.instagram-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.instagram-card { position: relative; overflow: hidden; aspect-ratio: 1; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+.instagram-card:hover { border-color: var(--border-strong); }
+.instagram-image { position: absolute; inset: 0; }
+.instagram-image::after { content: ""; position: absolute; inset: 35% 0 0; background: linear-gradient(transparent, #050607ee); }
+.instagram-image img { object-fit: cover; transition: transform .3s ease; }
+.instagram-card:hover img { transform: scale(1.025); }
+.instagram-copy { position: absolute; z-index: 2; inset: auto 20px 18px; display: grid; gap: 4px; }
+.instagram-copy small { color: var(--accent); font-weight: 750; }
+.instagram-copy strong { font-size: 1.05rem; }
+.instagram-copy > span { display: flex; align-items: center; gap: 6px; color: var(--text-secondary); font-size: .78rem; }
 
 /* Cards */
 .vehicle-card { position: relative; min-width: 0; overflow: hidden; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); transition: border-color .2s; }
@@ -144,7 +156,7 @@ input:focus, select:focus, textarea:focus, button:focus-visible, a:focus-visible
 .results-head form label { display: flex; align-items: center; gap: 10px; }
 .results-head select { width: 190px; min-height: 40px; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
-.chips a { min-height: 32px; display: flex; align-items: center; gap: 6px; padding: 0 10px; border: 1px solid #d4af5a55; border-radius: 20px; background: #d4af5a10; color: var(--accent); font-size: .75rem; }
+.chips a { min-height: 32px; display: flex; align-items: center; gap: 6px; padding: 0 10px; border: 1px solid #e3262e55; border-radius: 20px; background: #e3262e10; color: var(--accent); font-size: .75rem; }
 .mobile-toolbar { display: none; }
 .empty-state { min-height: 430px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px 20px; border: 1px solid var(--border); border-radius: 14px; background: var(--surface); }
 .empty-state > svg { width: 42px; height: 42px; margin-bottom: 18px; color: var(--text-muted); }
@@ -174,7 +186,7 @@ input:focus, select:focus, textarea:focus, button:focus-visible, a:focus-visible
 .detail-key-specs svg { width: 16px; color: var(--text-muted); }
 .vehicle-panel del { display: block; color: var(--text-muted); font-size: .82rem; }
 .detail-price { display: block; font-size: clamp(2rem, 3vw, 2.7rem); letter-spacing: -.045em; font-variant-numeric: tabular-nums; }
-.status { width: max-content; min-height: 29px; margin: 13px 0 23px; display: flex; align-items: center; padding: 0 10px; border-radius: 7px; background: #d4af5a13; color: var(--accent); font-size: .72rem; font-weight: 750; }
+.status { width: max-content; min-height: 29px; margin: 13px 0 23px; display: flex; align-items: center; padding: 0 10px; border-radius: 7px; background: #e3262e13; color: var(--accent); font-size: .72rem; font-weight: 750; }
 .status-reserved { background: #e7b45f17; color: var(--warning); }
 .status-sold { background: #8f9aa619; color: var(--text-muted); }
 .panel-ctas { display: grid; gap: 9px; }
@@ -264,6 +276,7 @@ input:focus, select:focus, textarea:focus, button:focus-visible, a:focus-visible
   .trust-grid div:nth-child(2) { border-right: 0; }
   .trust-grid div:nth-child(-n+2) { border-bottom: 1px solid var(--border); }
   .contact-banner { align-items: start; flex-direction: column; }
+  .instagram-grid { grid-template-columns: repeat(2, 1fr); }
   .catalog-page { padding-block: 42px 80px; }
   .catalog-search { max-width: none; margin-bottom: 14px; }
   .filter-sidebar, .results-head { display: none; }
@@ -318,6 +331,7 @@ input:focus, select:focus, textarea:focus, button:focus-visible, a:focus-visible
   .section-heading { align-items: start; }
   .section-heading > a { display: none; }
   .vehicle-grid, .home-grid { grid-template-columns: 1fr; gap: 16px; }
+  .instagram-grid { grid-template-columns: 1fr; }
   .card-body { padding: 18px; }
   .trust-grid { grid-template-columns: 1fr; }
   .trust-grid div { min-height: 70px; border-right: 0; border-bottom: 1px solid var(--border); }
@@ -417,7 +431,7 @@ body:has(.admin-shell), body:has(.admin-login) { background: #0c0f13; }
 .draft-banner, .success-banner { margin-bottom: 13px; min-height: 54px; padding: 10px 15px; display: flex; align-items: center; justify-content: space-between; border: 1px solid #e7b45f55; border-radius: 10px; background: #e7b45f10; color: var(--warning); }
 .draft-banner span { display: flex; gap: 7px; }
 .draft-banner button { min-height: 34px; border: 1px solid var(--border-strong); border-radius: 7px; background: transparent; color: var(--text); }
-.success-banner { border-color: #d4af5a55; color: var(--accent); background: #d4af5a10; }
+.success-banner { border-color: #e3262e55; color: var(--accent); background: #e3262e10; }
 .danger-zone { margin-top: 40px; padding: 25px; display: flex; align-items: center; justify-content: space-between; gap: 25px; border: 1px solid #f06a6a44; border-radius: 13px; }
 .danger-zone h2 { margin: 0; font-size: 1.1rem; }
 .danger-zone p { margin: 5px 0 0; color: var(--text-muted); }
@@ -550,7 +564,7 @@ button.palomin-kpi:hover { border-color: var(--border-strong); }
 .palomin-photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
 .palomin-photo-grid li { position: relative; aspect-ratio: 4/3; overflow: hidden; border-radius: 9px; background: var(--surface-raised); }
 .palomin-photo-grid img { width: 100%; height: 100%; object-fit: cover; }
-.palomin-cover-tag { position: absolute; left: 7px; top: 7px; padding: 3px 8px; border-radius: 6px; background: #d4af5ae6; color: var(--accent-foreground); font-size: .62rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+.palomin-cover-tag { position: absolute; left: 7px; top: 7px; padding: 3px 8px; border-radius: 6px; background: #e3262ee6; color: var(--accent-foreground); font-size: .62rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
 .palomin-photo-tools { position: absolute; inset-inline: 6px; bottom: 6px; display: flex; justify-content: center; gap: 6px; }
 .palomin-photo-tools .icon-button { width: 34px; height: 34px; background: rgba(9,11,14,.82); }
 .dropzone.busy { pointer-events: none; opacity: .75; }
@@ -588,7 +602,7 @@ button.palomin-kpi:hover { border-color: var(--border-strong); }
 .palomin-photo-grid li.pending img { opacity: .45; }
 .palomin-pending-note { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 5px; color: var(--text-secondary); font-size: .7rem; font-weight: 700; text-shadow: 0 1px 4px #000; }
 .palomin-photo-grid li.failed { outline: 1px solid var(--danger); }
-.dropzone.drag { border-color: var(--accent); background: #d4af5a0d; }
+.dropzone.drag { border-color: var(--accent); background: #e3262e0d; }
 .palomin-lightbox { width: 100vw; max-width: none; height: 100dvh; max-height: none; margin: 0; padding: 0; border: 0; background: #050607f2; color: var(--text); overflow: hidden; }
 .palomin-lightbox::backdrop { background: #050607cc; }
 .palomin-lightbox > img { position: absolute; inset: 74px 16px 130px; width: calc(100% - 32px); height: calc(100% - 204px); object-fit: contain; }
