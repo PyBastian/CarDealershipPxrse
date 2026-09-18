@@ -1,6 +1,10 @@
 name: Actualizar Instagram
 
 on:
+  push:
+    paths:
+      - "scripts/sync-instagram*"
+      - ".github/workflows/sync-instagram.yml"
   schedule:
     - cron: "17 10 * * *"
   workflow_dispatch:
