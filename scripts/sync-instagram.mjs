@@ -1,60 +1,55 @@
 import { mkdir, readdir, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import { chromium } from "playwright";
 
 const username = process.env.INSTAGRAM_USERNAME ?? "mkcars.cl";
 const profileUrl = `https://www.instagram.com/${username}/`;
 const imageDirectory = path.resolve("public/instagram");
 const dataFile = path.resolve("src/data/instagram.json");
 
-export function extractCaption(description) {
-  const start = description.indexOf(': "');
-  return (start < 0 ? description : description.slice(start + 3).replace(/"\.?\s*$/, "")).trim();
+export function extractPostShortcodes(html) {
+  return [...html.matchAll(/\\"shortcode_media\\":\{[\s\S]*?\\"shortcode\\":\\"([A-Za-z0-9_-]+)\\"/g)].map((match) => match[1]);
 }
 
 export function extractEmbedImageUrl(html) {
   return html.match(/<img class="EmbeddedMediaImage"[^>]+src="([^"]+)"/)?.[1].replaceAll("&amp;", "&");
 }
 
+export function extractEmbedCaption(html) {
+  const escaped = html.match(/\\"edge_media_to_caption\\":\{\\"edges\\":\[\{\\"node\\":\{\\"text\\":\\"((?:\\\\.|[^"\\])*)\\"/)?.[1];
+  if (!escaped) return "";
+  return [0, 1].reduce((value) => JSON.parse(`"${value.replaceAll('"', '\\"')}"`), escaped);
+}
+
 async function main() {
-  const browser = await chromium.launch({ headless: true });
-  try {
-    const page = await browser.newPage();
-    await page.goto(profileUrl, { waitUntil: "domcontentloaded", timeout: 30_000 });
-    const postLinks = 'a[href*="/p/"], a[href*="/reel/"]';
-    await page.locator(postLinks).first().waitFor({ timeout: 20_000 });
-    const urls = [...new Set(await page.locator(postLinks).evaluateAll((links) => links.map((link) => link.href)))].slice(0, 3);
-    if (!urls.length) throw new Error(`No se encontraron publicaciones en ${profileUrl}`);
+  const headers = { "User-Agent": "Mozilla/5.0" };
+  const profileResponse = await fetch(`${profileUrl}embed/`, { headers });
+  if (!profileResponse.ok) throw new Error(`No se pudo leer ${profileUrl}: ${profileResponse.status}`);
+  const shortcodes = extractPostShortcodes(await profileResponse.text()).slice(0, 3);
+  if (!shortcodes.length) throw new Error(`No se encontraron publicaciones en ${profileUrl}`);
 
-    await mkdir(imageDirectory, { recursive: true });
-    const posts = [];
-    for (const url of urls) {
-      const shortcode = new URL(url).pathname.split("/").filter(Boolean).at(-1);
-      if (!shortcode) throw new Error(`URL de publicación inválida: ${url}`);
-      const canonicalUrl = `https://www.instagram.com/p/${shortcode}/`;
-      await page.goto(url, { waitUntil: "domcontentloaded", timeout: 30_000 });
-      const description = await page.locator('meta[property="og:description"]').getAttribute("content");
-      const embedResponse = await fetch(`${canonicalUrl}embed/`, { headers: { "User-Agent": "Mozilla/5.0" } });
-      const imageUrl = embedResponse.ok ? extractEmbedImageUrl(await embedResponse.text()) : null;
-      if (!description || !imageUrl) throw new Error(`Instagram no entregó metadatos para ${url}`);
+  await mkdir(imageDirectory, { recursive: true });
+  const posts = [];
+  for (const shortcode of shortcodes) {
+    const canonicalUrl = `https://www.instagram.com/p/${shortcode}/`;
+    const embedResponse = await fetch(`${canonicalUrl}embed/`, { headers });
+    const embedHtml = embedResponse.ok ? await embedResponse.text() : "";
+    const imageUrl = extractEmbedImageUrl(embedHtml);
+    const caption = extractEmbedCaption(embedHtml);
+    if (!caption || !imageUrl) throw new Error(`Instagram no entregó metadatos para ${canonicalUrl}`);
 
-      const caption = extractCaption(description);
-      const title = caption.split("\n").find(Boolean)?.trim() ?? `Publicación de @${username}`;
-      const response = await fetch(imageUrl, { headers: { Referer: "https://www.instagram.com/" } });
-      if (!response.ok) throw new Error(`No se pudo descargar la imagen de ${url}: ${response.status}`);
-      await writeFile(path.join(imageDirectory, `${shortcode}.jpg`), Buffer.from(await response.arrayBuffer()));
-      posts.push({ shortcode, url: canonicalUrl, image: `/instagram/${shortcode}.jpg`, title, caption });
-    }
-
-    const keep = new Set(posts.map((post) => `${post.shortcode}.jpg`));
-    for (const file of await readdir(imageDirectory)) if (file.endsWith(".jpg") && !keep.has(file)) await unlink(path.join(imageDirectory, file));
-    await mkdir(path.dirname(dataFile), { recursive: true });
-    await writeFile(dataFile, `${JSON.stringify(posts, null, 2)}\n`);
-    console.log(`Instagram sincronizado: ${posts.length} publicaciones de @${username}`);
-  } finally {
-    await browser.close();
+    const title = caption.split("\n").find(Boolean)?.trim() ?? `Publicación de @${username}`;
+    const response = await fetch(imageUrl, { headers: { Referer: "https://www.instagram.com/" } });
+    if (!response.ok) throw new Error(`No se pudo descargar la imagen de ${canonicalUrl}: ${response.status}`);
+    await writeFile(path.join(imageDirectory, `${shortcode}.jpg`), Buffer.from(await response.arrayBuffer()));
+    posts.push({ shortcode, url: canonicalUrl, image: `/instagram/${shortcode}.jpg`, title, caption });
   }
+
+  const keep = new Set(posts.map((post) => `${post.shortcode}.jpg`));
+  for (const file of await readdir(imageDirectory)) if (file.endsWith(".jpg") && !keep.has(file)) await unlink(path.join(imageDirectory, file));
+  await mkdir(path.dirname(dataFile), { recursive: true });
+  await writeFile(dataFile, `${JSON.stringify(posts, null, 2)}\n`);
+  console.log(`Instagram sincronizado: ${posts.length} publicaciones de @${username}`);
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) main().catch((error) => { console.error(error); process.exitCode = 1; });
