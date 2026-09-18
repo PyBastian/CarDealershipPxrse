@@ -13,6 +13,10 @@ export function extractCaption(description) {
   return (start < 0 ? description : description.slice(start + 3).replace(/"\.?\s*$/, "")).trim();
 }
 
+export function extractEmbedImageUrl(html) {
+  return html.match(/<img class="EmbeddedMediaImage"[^>]+src="([^"]+)"/)?.[1].replaceAll("&amp;", "&");
+}
+
 async function main() {
   const browser = await chromium.launch({ headless: true });
   try {
@@ -26,21 +30,21 @@ async function main() {
     await mkdir(imageDirectory, { recursive: true });
     const posts = [];
     for (const url of urls) {
-      await page.goto(url, { waitUntil: "domcontentloaded", timeout: 30_000 });
-      const [description, imageUrl] = await Promise.all([
-        page.locator('meta[property="og:description"]').getAttribute("content"),
-        page.locator('meta[property="og:image"]').getAttribute("content")
-      ]);
-      if (!description || !imageUrl) throw new Error(`Instagram no entregó metadatos para ${url}`);
-
       const shortcode = new URL(url).pathname.split("/").filter(Boolean).at(-1);
       if (!shortcode) throw new Error(`URL de publicación inválida: ${url}`);
+      const canonicalUrl = `https://www.instagram.com/p/${shortcode}/`;
+      await page.goto(url, { waitUntil: "domcontentloaded", timeout: 30_000 });
+      const description = await page.locator('meta[property="og:description"]').getAttribute("content");
+      const embedResponse = await fetch(`${canonicalUrl}embed/`, { headers: { "User-Agent": "Mozilla/5.0" } });
+      const imageUrl = embedResponse.ok ? extractEmbedImageUrl(await embedResponse.text()) : null;
+      if (!description || !imageUrl) throw new Error(`Instagram no entregó metadatos para ${url}`);
+
       const caption = extractCaption(description);
       const title = caption.split("\n").find(Boolean)?.trim() ?? `Publicación de @${username}`;
       const response = await fetch(imageUrl, { headers: { Referer: "https://www.instagram.com/" } });
       if (!response.ok) throw new Error(`No se pudo descargar la imagen de ${url}: ${response.status}`);
       await writeFile(path.join(imageDirectory, `${shortcode}.jpg`), Buffer.from(await response.arrayBuffer()));
-      posts.push({ shortcode, url, image: `/instagram/${shortcode}.jpg`, title, caption });
+      posts.push({ shortcode, url: canonicalUrl, image: `/instagram/${shortcode}.jpg`, title, caption });
     }
 
     const keep = new Set(posts.map((post) => `${post.shortcode}.jpg`));
